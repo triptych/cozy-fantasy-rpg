@@ -12,6 +12,31 @@
     --color-white: #ffffff;
     --color-shadow: rgba(0, 0, 0, 0.1);
 
+    /* Time of Day Colors */
+    --color-morning-bg: #f9f3e6;
+    --color-morning-accent: #f8d56f;
+    --color-afternoon-bg: #f9f3e6;
+    --color-afternoon-accent: #e9b872;
+    --color-evening-bg: #f5e9d5;
+    --color-evening-accent: #e08d45;
+    --color-night-bg: #2c2c3d;
+    --color-night-accent: #8d82c4;
+    --color-night-text: #e0e0e0;
+
+    /* Season Colors */
+    --color-spring-bg: #f0f7e6;
+    --color-spring-accent: #a8d672;
+    --color-spring-secondary: #7fb069;
+    --color-summer-bg: #f9f3e6;
+    --color-summer-accent: #e9b872;
+    --color-summer-secondary: #e08d45;
+    --color-autumn-bg: #f7ede2;
+    --color-autumn-accent: #d95d39;
+    --color-autumn-secondary: #9e2a2b;
+    --color-winter-bg: #e6f0f9;
+    --color-winter-accent: #a3c6e3;
+    --color-winter-secondary: #6a8eae;
+
     /* Font Variables */
     --font-main: 'Arial', sans-serif;
     --font-heading: 'Arial', sans-serif;
@@ -345,6 +370,126 @@ input, select, textarea {
     padding: 8px;
     border-radius: var(--border-radius);
     border: 1px solid #ddd;
+}
+
+/* Time of Day and Season Styles */
+/* Morning (6 AM - 12 PM) */
+body.time-morning {
+    background-color: var(--color-morning-bg);
+}
+
+body.time-morning .game-header,
+body.time-morning .game-footer {
+    background-color: var(--color-white);
+}
+
+body.time-morning .btn-accent {
+    background-color: var(--color-morning-accent);
+}
+
+/* Afternoon (12 PM - 6 PM) */
+body.time-afternoon {
+    background-color: var(--color-afternoon-bg);
+}
+
+body.time-afternoon .game-header,
+body.time-afternoon .game-footer {
+    background-color: var(--color-white);
+}
+
+body.time-afternoon .btn-accent {
+    background-color: var(--color-afternoon-accent);
+}
+
+/* Evening (6 PM - 10 PM) */
+body.time-evening {
+    background-color: var(--color-evening-bg);
+}
+
+body.time-evening .game-header,
+body.time-evening .game-footer {
+    background-color: var(--color-white);
+}
+
+body.time-evening .btn-accent {
+    background-color: var(--color-evening-accent);
+}
+
+/* Night (10 PM - 6 AM) */
+body.time-night {
+    background-color: var(--color-night-bg);
+    color: var(--color-night-text);
+}
+
+body.time-night .game-header,
+body.time-night .game-footer {
+    background-color: #3a3a4e;
+    color: var(--color-night-text);
+}
+
+body.time-night h1,
+body.time-night h2,
+body.time-night h3 {
+    color: var(--color-night-accent);
+}
+
+body.time-night .btn-accent {
+    background-color: var(--color-night-accent);
+    color: var(--color-night-text);
+}
+
+body.time-night .panel {
+    background-color: #3a3a4e;
+    color: var(--color-night-text);
+}
+
+/* Season Styles */
+/* Spring */
+body.season-spring {
+    --color-primary: var(--color-spring-secondary);
+    --color-secondary: #7fb069;
+    --color-accent: var(--color-spring-accent);
+}
+
+body.season-spring .game-header h1,
+body.season-spring .panel h3 {
+    color: var(--color-spring-secondary);
+}
+
+/* Summer */
+body.season-summer {
+    --color-primary: var(--color-summer-secondary);
+    --color-secondary: #e08d45;
+    --color-accent: var(--color-summer-accent);
+}
+
+body.season-summer .game-header h1,
+body.season-summer .panel h3 {
+    color: var(--color-summer-secondary);
+}
+
+/* Autumn */
+body.season-autumn {
+    --color-primary: var(--color-autumn-secondary);
+    --color-secondary: #d95d39;
+    --color-accent: var(--color-autumn-accent);
+}
+
+body.season-autumn .game-header h1,
+body.season-autumn .panel h3 {
+    color: var(--color-autumn-secondary);
+}
+
+/* Winter */
+body.season-winter {
+    --color-primary: var(--color-winter-secondary);
+    --color-secondary: #6a8eae;
+    --color-accent: var(--color-winter-accent);
+}
+
+body.season-winter .game-header h1,
+body.season-winter .panel h3 {
+    color: var(--color-winter-secondary);
 }
 
 /* Responsive Adjustments */

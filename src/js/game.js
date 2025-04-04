@@ -298,6 +298,11 @@ export class Game {
         if (timeInfo.isSeasonStart) {
             this.onSeasonChange(timeInfo.season);
         }
+
+        // Check for hour change to update visual appearance
+        if (this.timeSystem.hour !== this.timeSystem.lastHour) {
+            this.updateVisualAppearance();
+        }
     }
 
     /**
@@ -398,6 +403,7 @@ export class Game {
         this.updateTimeDisplay();
         this.updateResourceDisplay();
         this.updateTaskList();
+        this.updateVisualAppearance();
     }
 
     /**
@@ -415,6 +421,37 @@ export class Game {
         if (dateElement) {
             dateElement.textContent = timeInfo.dateString;
         }
+    }
+
+    /**
+     * Update the visual appearance based on time of day and season
+     */
+    updateVisualAppearance() {
+        const timeInfo = this.timeSystem.getCurrentTimeInfo();
+        const hour = timeInfo.hour;
+        const season = timeInfo.season.toLowerCase();
+
+        // Remove all time and season classes
+        document.body.classList.remove(
+            'time-morning', 'time-afternoon', 'time-evening', 'time-night',
+            'season-spring', 'season-summer', 'season-autumn', 'season-winter'
+        );
+
+        // Add appropriate time of day class
+        if (hour >= 6 && hour < 12) {
+            document.body.classList.add('time-morning');
+        } else if (hour >= 12 && hour < 18) {
+            document.body.classList.add('time-afternoon');
+        } else if (hour >= 18 && hour < 22) {
+            document.body.classList.add('time-evening');
+        } else {
+            document.body.classList.add('time-night');
+        }
+
+        // Add appropriate season class
+        document.body.classList.add(`season-${season}`);
+
+        console.log(`Visual appearance updated for ${timeInfo.timeString} in ${season}`);
     }
 
     /**
