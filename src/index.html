@@ -3,55 +3,76 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Cozy Fantasy RPG - Prototype</title>
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                line-height: 1.6;
-                color: #333;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #f9f3e6;
-            }
-            h1 {
-                color: #6b4226;
-                text-align: center;
-            }
-            .container {
-                background-color: #fff;
-                border-radius: 8px;
-                padding: 20px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            footer {
-                text-align: center;
-                margin-top: 30px;
-                font-size: 0.8em;
-                color: #777;
-            }
-        </style>
+        <title>Cozy Hearth - A Magical Inn Management RPG</title>
+        <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
-        <h1>Cozy Fantasy RPG</h1>
+        <div class="game-container">
+            <header class="game-header">
+                <h1>Cozy Hearth</h1>
+                <div class="game-controls">
+                    <button id="save-button" class="btn">Save Game</button>
+                    <button id="load-button" class="btn">Load Game</button>
+                    <button id="settings-button" class="btn">Settings</button>
+                </div>
+            </header>
 
-        <div class="container">
-            <h2>Welcome to our game prototype!</h2>
-            <p>This is a simple prototype page for our upcoming cozy fantasy RPG. In this game, players will:</p>
+            <main class="game-main">
+                <div class="game-canvas-container">
+                    <canvas id="game-canvas"></canvas>
+                    <div class="game-ui">
+                        <!-- Dynamic UI elements will be added here -->
+                    </div>
+                </div>
 
-            <ul>
-                <li>Explore a charming fantasy world</li>
-                <li>Build and customize their own cottage</li>
-                <li>Make friends with magical creatures</li>
-                <li>Craft items and cook delicious meals</li>
-                <li>Complete quests to help the local villagers</li>
-            </ul>
+                <aside class="game-sidebar">
+                    <div class="player-info panel">
+                        <h3>Innkeeper</h3>
+                        <div class="time-display">
+                            <p id="game-time">6:00 AM</p>
+                            <p id="game-date">Day 1 of Spring, Year 1</p>
+                        </div>
+                    </div>
 
-            <p>Stay tuned for more updates as development progresses!</p>
+                    <div class="resources panel">
+                        <h3>Resources</h3>
+                        <ul id="resource-list">
+                            <li>Gold:
+                                <span id="gold-amount">100</span></li>
+                            <li>Wood:
+                                <span id="wood-amount">15</span></li>
+                            <li>Food:
+                                <span id="food-amount">20</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="tasks panel">
+                        <h3>Daily Tasks</h3>
+                        <ul id="task-list">
+                            <li>Prepare breakfast</li>
+                            <li>Clean rooms</li>
+                            <li>Welcome new guests</li>
+                        </ul>
+                    </div>
+                </aside>
+            </main>
+
+            <footer class="game-footer">
+                <p>Cozy Hearth - &copy; 2025 - A Magical Inn Management RPG</p>
+            </footer>
         </div>
 
-        <footer>
-            <p>Cozy Fantasy RPG Prototype - &copy; 2025</p>
-        </footer>
+        <!-- Game dialogs -->
+        <div id="dialog-container" class="hidden">
+            <div class="dialog panel">
+                <h3 id="dialog-title">Dialog Title</h3>
+                <div id="dialog-content">Dialog content goes here.</div>
+                <div id="dialog-options"></div>
+                <button id="dialog-close" class="btn">Close</button>
+            </div>
+        </div>
+
+        <!-- Load game scripts as modules -->
+        <script type="module" src="js/main.js"></script>
     </body>
 </html>

@@ -218,9 +218,11 @@
 - **Save System**: Cloud saves with local backup option
 
 ### Frontend Technologies
-- **Framework**: React or Vue.js for component-based UI
-- **Graphics**: HTML5 Canvas with WebGL for rendering
-- **Animation**: CSS animations and JavaScript for interactive elements
+- **Core Technologies**: Vanilla HTML, CSS, and JavaScript without frameworks
+- **Modern JavaScript**: ES modules for code organization and maintainability
+- **Web Components**: Custom elements for reusable UI features without frameworks
+- **Graphics**: HTML5 Canvas with WebGL for rendering and SVG for UI elements
+- **Animation**: CSS animations and vanilla JavaScript for interactive elements
 - **Audio**: Web Audio API for sound management
 
 ### Backend Requirements

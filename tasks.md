@@ -19,7 +19,7 @@ This document tracks all development tasks for the Cozy Hearth web-based cozy fa
 ## Core Systems
 
 ### Game Framework
-- [ ] Set up basic web application structure
+- [x] Set up basic web application structure
 - [ ] Implement save/load system
 - [ ] Create time and season cycle system
 - [ ] Develop resource management system

@@ -1,0 +1,346 @@
+/* Cozy Hearth - Main Stylesheet */
+
+/* Base Styles */
+:root {
+    /* Color Variables */
+    --color-primary: #6b4226;
+    --color-secondary: #a67c52;
+    --color-accent: #e9b872;
+    --color-background: #f9f3e6;
+    --color-text: #333333;
+    --color-text-light: #777777;
+    --color-white: #ffffff;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+
+    /* Font Variables */
+    --font-main: 'Arial', sans-serif;
+    --font-heading: 'Arial', sans-serif;
+
+    /* Spacing Variables */
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 50px;
+
+    /* Border Radius */
+    --border-radius: 8px;
+
+    /* Transitions */
+    --transition-speed: 0.3s;
+}
+
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font-family: var(--font-main);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-top: var(--spacing-lg);
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+p {
+    margin-bottom: var(--spacing-md);
+}
+
+a {
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+}
+
+.panel {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    box-shadow: 0 2px 10px var(--color-shadow);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Game UI Elements */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.game-header {
+    padding: var(--spacing-sm);
+    background-color: var(--color-white);
+    box-shadow: 0 2px 5px var(--color-shadow);
+    z-index: 10;
+}
+
+.game-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.game-canvas-container {
+    flex: 1;
+    position: relative;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through to canvas */
+}
+
+.game-ui > * {
+    pointer-events: auto; /* Re-enable pointer events for UI elements */
+}
+
+.game-sidebar {
+    width: 300px;
+    background-color: var(--color-white);
+    box-shadow: -2px 0 5px var(--color-shadow);
+    overflow-y: auto;
+    padding: var(--spacing-md);
+}
+
+.game-footer {
+    padding: var(--spacing-sm);
+    background-color: var(--color-white);
+    box-shadow: 0 -2px 5px var(--color-shadow);
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    transition: background-color var(--transition-speed);
+}
+
+.btn:hover {
+    background-color: var(--color-primary);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: #543418;
+}
+
+.btn-accent {
+    background-color: var(--color-accent);
+    color: var(--color-text);
+}
+
+.btn-accent:hover {
+    background-color: #d9a85f;
+}
+
+/* Form Elements */
+input, select, textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-family: var(--font-main);
+    font-size: 1rem;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }
+
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }
+
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-white);
+    box-shadow: 0 2px 10px var(--color-shadow);
+    color: var(--color-text);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification-info {
+    border-left: 4px solid var(--color-secondary);
+}
+
+.notification-success {
+    border-left: 4px solid #4caf50;
+}
+
+.notification-error {
+    border-left: 4px solid #f44336;
+}
+
+/* Dialog Styles */
+.dialog {
+    max-width: 500px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+#dialog-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#dialog-title {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+#dialog-content {
+    margin: 20px 0;
+}
+
+#dialog-options {
+    margin-bottom: 20px;
+}
+
+.setting-item {
+    margin-bottom: 15px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.setting-item select, .setting-item input {
+    width: 100%;
+    padding: 8px;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .game-main {
+        flex-direction: column;
+    }
+
+    .game-sidebar {
+        width: 100%;
+        height: 200px;
+    }
+
+    .notification {
+        width: 90%;
+        right: 5%;
+    }
+}
