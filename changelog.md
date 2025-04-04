@@ -80,4 +80,18 @@ Each entry should follow this format:
 
 ---
 
+## [2025-04-04] - UI Improvements
+
+### Fixed
+- Fixed clock display in the innkeeper view to have consistent width and formatting:
+  - Added specific CSS styling for the time display
+  - Used monospace font for consistent character width
+  - Ensured hours are always displayed with two digits
+  - Added fixed width to prevent layout shifts during time changes
+
+### Progress
+- Improved user interface stability and readability
+
+---
+
 *Future updates will be added here as development progresses.*

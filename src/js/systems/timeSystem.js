@@ -92,13 +92,14 @@ export class TimeSystem {
      * @param {number} minutes - Number of minutes to advance
      */
     advanceTime(minutes) {
-        // Add minutes
+        // Add minutes and ensure it's an integer
         this.minute += minutes;
+        this.minute = Math.floor(this.minute);
 
         // Handle minute overflow
         if (this.minute >= this.MINUTES_PER_HOUR) {
             const hoursToAdd = Math.floor(this.minute / this.MINUTES_PER_HOUR);
-            this.minute %= this.MINUTES_PER_HOUR;
+            this.minute = Math.floor(this.minute % this.MINUTES_PER_HOUR);
             this.hour += hoursToAdd;
 
             // Handle hour overflow
