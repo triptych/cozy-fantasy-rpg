@@ -197,7 +197,9 @@ export class TimeSystem {
         const hourDisplay = this.hour % 12 === 0 ? 12 : this.hour % 12;
         const ampm = this.hour < 12 ? 'AM' : 'PM';
         const minuteDisplay = this.minute.toString().padStart(2, '0');
-        return `${hourDisplay}:${minuteDisplay} ${ampm}`;
+        // Format hour to always be 2 digits (e.g., "01" instead of "1")
+        const hourDisplayFormatted = hourDisplay.toString().padStart(2, '0');
+        return `${hourDisplayFormatted}:${minuteDisplay} ${ampm}`;
     }
 
     /**

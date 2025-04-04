@@ -152,6 +152,25 @@ canvas {
     padding: var(--spacing-md);
 }
 
+/* Time Display */
+.time-display {
+    margin-bottom: var(--spacing-md);
+}
+
+.time-display p {
+    font-family: monospace;
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xs);
+    text-align: center;
+}
+
+#game-time {
+    font-weight: bold;
+    font-size: 1.2rem;
+    min-width: 80px;
+    display: inline-block;
+}
+
 .game-footer {
     padding: var(--spacing-sm);
     background-color: var(--color-white);
