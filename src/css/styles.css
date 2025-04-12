@@ -132,6 +132,277 @@ a:hover {
     height: 100vh;
 }
 
+/* Resource Management System */
+.resource-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.btn-small {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.9rem;
+}
+
+.detailed-resources {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-sm);
+    border-top: 1px dashed #ddd;
+    font-size: 0.9rem;
+}
+
+.detailed-resources h4 {
+    margin-bottom: var(--spacing-xs);
+    font-size: 1.1rem;
+}
+
+.detailed-resources h5 {
+    margin-bottom: var(--spacing-xs);
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.resource-category {
+    margin-bottom: var(--spacing-sm);
+}
+
+.resource-subcategory {
+    margin-left: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.resource-list {
+    list-style: none;
+    margin-left: var(--spacing-sm);
+}
+
+.resource-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.resource-amount {
+    font-weight: bold;
+}
+
+/* Market Dialog Styles */
+.market-container {
+    padding: var(--spacing-sm);
+}
+
+.market-gold {
+    font-weight: bold;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: rgba(233, 184, 114, 0.2);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.market-tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: var(--spacing-md);
+}
+
+.market-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+.market-tab.active {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.category-tabs {
+    display: flex;
+    margin-bottom: var(--spacing-sm);
+    border-bottom: 1px solid #eee;
+}
+
+.category-tab {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.category-tab.active {
+    color: var(--color-secondary);
+    border-bottom: 2px solid var(--color-secondary);
+}
+
+.market-items {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: var(--spacing-sm);
+}
+
+.market-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid #eee;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.item-price, .item-amount {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-input {
+    width: 50px;
+    margin-right: var(--spacing-sm);
+    margin-bottom: 0;
+    padding: var(--spacing-xs);
+    text-align: center;
+}
+
+.btn-buy {
+    background-color: var(--color-secondary);
+}
+
+.btn-sell {
+    background-color: var(--color-primary);
+}
+
+/* Crafting Dialog Styles */
+.crafting-container {
+    padding: var(--spacing-sm);
+}
+
+.recipe-type-tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: var(--spacing-md);
+}
+
+.recipe-type-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+.recipe-type-tab.active {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.recipe-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.recipe-item {
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.recipe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.recipe-name {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.recipe-skill {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    background-color: rgba(107, 66, 38, 0.1);
+    border-radius: 4px;
+}
+
+.recipe-inputs, .recipe-outputs {
+    margin-bottom: var(--spacing-sm);
+}
+
+.recipe-inputs h5, .recipe-outputs h5 {
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+}
+
+.recipe-inputs ul, .recipe-outputs ul {
+    list-style: none;
+    margin-left: var(--spacing-sm);
+    font-size: 0.9rem;
+}
+
+.recipe-time {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-sm);
+}
+
+.recipe-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recipe-quantity {
+    width: 60px;
+    margin-right: var(--spacing-sm);
+    margin-bottom: 0;
+    padding: var(--spacing-xs);
+    text-align: center;
+}
+
+.btn-craft {
+    background-color: var(--color-secondary);
+    flex-grow: 1;
+}
+
+.crafting-started {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
 .game-header {
     padding: var(--spacing-sm);
     background-color: var(--color-white);

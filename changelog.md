@@ -134,4 +134,31 @@ Each entry should follow this format:
 
 ---
 
+## [2025-04-11] - Resource Management System
+
+### Added
+- Created comprehensive resource management system:
+  - Implemented CraftingSystem class for resource crafting with categories and recipes
+  - Added detailed resource UI with expandable categories and subcategories
+  - Created resource action buttons for Market and Crafting interfaces
+  - Implemented advanced crafting dialog with recipe types and crafting progress
+  - Added market interface with buy/sell tabs and category filtering
+  - Created event listeners for resource changes and crafting events
+  - Added in-game notifications for resource events and limits
+- Enhanced game UI:
+  - Added CSS styles for resource management interfaces
+  - Implemented tabbed interfaces for market and crafting dialogs
+  - Created dynamic resource list generation with formatted display
+
+### Changed
+- Updated resource display to show detailed information about all resource categories
+- Modified Game class to integrate with the new crafting system
+- Enhanced save/load system to handle crafting data preservation
+
+### Progress
+- Completed fourth task from Core Systems > Game Framework: "Develop resource management system"
+- Enhanced gameplay with in-depth resource interactions and crafting mechanics
+
+---
+
 *Future updates will be added here as development progresses.*

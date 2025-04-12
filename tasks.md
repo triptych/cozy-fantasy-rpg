@@ -22,7 +22,7 @@ This document tracks all development tasks for the Cozy Hearth web-based cozy fa
 - [x] Set up basic web application structure
 - [x] Implement save/load system
 - [x] Create time and season cycle system
-- [ ] Develop resource management system
+- [x] Develop resource management system
 - [ ] Build basic interaction mechanics
 
 ### Daily Routine System

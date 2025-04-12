@@ -8,6 +8,7 @@ import { SaveSystem } from './systems/saveSystem.js';
 import { TimeSystem } from './systems/timeSystem.js';
 import { ResourceSystem } from './systems/resourceSystem.js';
 import { InteractionSystem } from './systems/interactionSystem.js';
+import { CraftingSystem } from './systems/craftingSystem.js';
 import {
     initialPlayerData,
     initialInnData,
@@ -25,6 +26,7 @@ export class Game {
         this.timeSystem = null;
         this.resourceSystem = null;
         this.interactionSystem = null;
+        this.craftingSystem = null;
 
         // Game data
         this.player = null;
@@ -57,12 +59,14 @@ export class Game {
         this.timeSystem = new TimeSystem();
         this.resourceSystem = new ResourceSystem();
         this.interactionSystem = new InteractionSystem();
+        this.craftingSystem = new CraftingSystem(this.resourceSystem, this.player);
 
         // Initialize each system
         await this.saveSystem.init();
         await this.timeSystem.init();
         await this.resourceSystem.init();
         await this.interactionSystem.init();
+        await this.craftingSystem.init();
 
         // Try to load saved game data
         const savedData = this.saveSystem.loadGame();
@@ -124,6 +128,9 @@ export class Game {
         // Restore system states
         this.timeSystem.loadState(savedData.time);
         this.resourceSystem.loadState(savedData.resources);
+
+        // Update crafting system with the loaded player data
+        this.craftingSystem = new CraftingSystem(this.resourceSystem, this.player);
     }
 
     /**
@@ -171,6 +178,80 @@ export class Game {
                 this.hideDialog();
             });
         }
+
+        // Resource management buttons
+        this.setupResourceManagementListeners();
+    }
+
+    /**
+     * Set up event listeners for resource management UI elements
+     */
+    setupResourceManagementListeners() {
+        // Market button
+        const marketButton = document.getElementById('market-button');
+        if (marketButton) {
+            marketButton.addEventListener('click', () => {
+                this.showDialog('Market', this.createMarketDialog(), {
+                    hideCloseButton: false
+                });
+            });
+        }
+
+        // Craft button
+        const craftButton = document.getElementById('craft-button');
+        if (craftButton) {
+            craftButton.addEventListener('click', () => {
+                this.showDialog('Crafting', this.craftingSystem.createCraftingDialog(), {
+                    hideCloseButton: false
+                });
+            });
+        }
+
+        // Toggle detailed resources
+        const resourcesPanel = document.querySelector('.resources.panel h3');
+        if (resourcesPanel) {
+            resourcesPanel.style.cursor = 'pointer';
+            resourcesPanel.addEventListener('click', () => {
+                const detailedResources = document.getElementById('detailed-resources');
+                if (detailedResources) {
+                    detailedResources.classList.toggle('hidden');
+
+                    // If now visible, update the detailed view
+                    if (!detailedResources.classList.contains('hidden')) {
+                        this.updateDetailedResourceDisplay();
+                    }
+                }
+            });
+        }
+
+        // Set up resource change listeners
+        this.resourceSystem.addEventListener('onResourceChanged', (data) => {
+            // Update specific resource elements if they exist
+            const resourceElement = document.querySelector(`.resource-amount[data-resource="${data.type}"]`);
+            if (resourceElement) {
+                resourceElement.textContent = Math.floor(data.newAmount);
+            }
+
+            // Update the main resource display
+            this.updateResourceDisplay();
+        });
+
+        this.resourceSystem.addEventListener('onResourceLimitReached', (data) => {
+            this.showNotification(`${data.type.charAt(0).toUpperCase() + data.type.slice(1)} storage full!`, 'info');
+        });
+
+        // Set up crafting listeners
+        this.craftingSystem.addEventListener('onCraftingStarted', (data) => {
+            this.showNotification(`Started crafting ${data.quantity} ${data.recipe.name}.`, 'success');
+        });
+
+        this.craftingSystem.addEventListener('onCraftingCompleted', (data) => {
+            this.showNotification(`Completed crafting ${data.quantity} ${data.recipe.name}!`, 'success');
+        });
+
+        this.craftingSystem.addEventListener('onCraftingFailed', (data) => {
+            this.showNotification(`Failed to craft ${data.recipe?.name || 'item'}: ${data.reason}`, 'error');
+        });
     }
 
     /**
@@ -215,6 +296,7 @@ export class Game {
             guests: this.guests,
             time: this.timeSystem.getState(),
             resources: this.resourceSystem.getState()
+            // Active crafting processes are not saved since they will be recreated on load
         };
 
         this.saveSystem.saveGame(gameData);
@@ -255,6 +337,9 @@ export class Game {
 
         // Update interactions
         this.interactionSystem.update(deltaTime);
+
+        // Update crafting processes
+        this.craftingSystem.update(deltaTime);
 
         // Update other game elements
         this.updateGuests(deltaTime);
@@ -483,6 +568,116 @@ export class Game {
             const totalFood = flour + eggs + vegetables;
             foodElement.textContent = totalFood;
         }
+
+        // Update the full resource list if the detailed resource panel exists
+        this.updateDetailedResourceDisplay();
+    }
+
+    /**
+     * Update the detailed resource display
+     */
+    updateDetailedResourceDisplay() {
+        const resourcePanel = document.getElementById('detailed-resources');
+        if (!resourcePanel) return;
+
+        // Clear existing content
+        resourcePanel.innerHTML = '';
+
+        // Create sections for each resource category
+        const categories = {
+            currency: 'Currency',
+            ingredients: 'Ingredients',
+            materials: 'Materials',
+            garden: 'Garden'
+        };
+
+        for (const [categoryKey, categoryName] of Object.entries(categories)) {
+            const categoryResources = this.resourceSystem.getCategoryResources(categoryKey);
+
+            // Skip empty categories
+            if (Object.keys(categoryResources).length === 0) continue;
+
+            // Create category section
+            const categorySection = document.createElement('div');
+            categorySection.className = 'resource-category';
+
+            const categoryTitle = document.createElement('h4');
+            categoryTitle.textContent = categoryName;
+            categorySection.appendChild(categoryTitle);
+
+            const resourceList = document.createElement('ul');
+            resourceList.className = 'resource-list';
+
+            // Handle special case for garden seeds which is nested
+            if (categoryKey === 'garden' && categoryResources.seeds) {
+                // Add non-seed garden resources
+                for (const [resourceKey, amount] of Object.entries(categoryResources)) {
+                    if (resourceKey === 'seeds') continue; // Skip seeds, we'll handle them separately
+                    if (typeof amount !== 'number') continue; // Skip non-numeric values
+
+                    const resourceItem = this.createResourceListItem(resourceKey, amount);
+                    resourceList.appendChild(resourceItem);
+                }
+
+                // Create seeds subsection
+                const seedsSection = document.createElement('div');
+                seedsSection.className = 'resource-subcategory';
+
+                const seedsTitle = document.createElement('h5');
+                seedsTitle.textContent = 'Seeds';
+                seedsSection.appendChild(seedsTitle);
+
+                const seedsList = document.createElement('ul');
+                seedsList.className = 'resource-list';
+
+                for (const [seedType, amount] of Object.entries(categoryResources.seeds)) {
+                    if (typeof amount !== 'number') continue; // Skip non-numeric values
+
+                    const resourceItem = this.createResourceListItem(seedType, amount);
+                    seedsList.appendChild(resourceItem);
+                }
+
+                seedsSection.appendChild(seedsList);
+                categorySection.appendChild(resourceList);
+                categorySection.appendChild(seedsSection);
+            } else {
+                // Standard flat category
+                for (const [resourceKey, amount] of Object.entries(categoryResources)) {
+                    if (typeof amount !== 'number') continue; // Skip non-numeric values
+
+                    const resourceItem = this.createResourceListItem(resourceKey, amount);
+                    resourceList.appendChild(resourceItem);
+                }
+
+                categorySection.appendChild(resourceList);
+            }
+
+            resourcePanel.appendChild(categorySection);
+        }
+    }
+
+    /**
+     * Create a resource list item for the detailed resource display
+     * @param {string} resourceKey - The resource key
+     * @param {number} amount - The resource amount
+     * @returns {HTMLLIElement} The created list item
+     */
+    createResourceListItem(resourceKey, amount) {
+        const resourceItem = document.createElement('li');
+
+        // Format the resource name (e.g., convert "glowberries" to "Glowberries")
+        const formattedName = resourceKey.charAt(0).toUpperCase() + resourceKey.slice(1).replace(/_/g, ' ');
+
+        // Create the amount span with a data attribute for easy updates
+        const amountSpan = document.createElement('span');
+        amountSpan.className = 'resource-amount';
+        amountSpan.dataset.resource = resourceKey;
+        amountSpan.textContent = Math.floor(amount); // Round down to avoid fractional resources in display
+
+        resourceItem.textContent = `${formattedName}: `;
+        resourceItem.appendChild(amountSpan);
+
+        return resourceItem;
     }
 
     /**
@@ -541,23 +736,50 @@ export class Game {
      * Show a dialog with the given title and content
      * @param {string} title - The dialog title
      * @param {HTMLElement|string} content - The dialog content
+     * @param {Object} options - Additional options for the dialog
      */
-    showDialog(title, content) {
+    showDialog(title, content, options = {}) {
         const dialogContainer = document.getElementById('dialog-container');
         const dialogTitle = document.getElementById('dialog-title');
         const dialogContent = document.getElementById('dialog-content');
+        const dialogOptions = document.getElementById('dialog-options');
 
         if (dialogContainer && dialogTitle && dialogContent) {
             dialogTitle.textContent = title;
 
             // Clear existing content
             dialogContent.innerHTML = '';
+            dialogOptions.innerHTML = '';
 
             // Add new content
             if (typeof content === 'string') {
                 dialogContent.textContent = content;
             } else {
                 dialogContent.appendChild(content);
+            }
+
+            // Add dialog options if provided
+            if (options.buttons) {
+                for (const button of options.buttons) {
+                    const buttonElement = document.createElement('button');
+                    buttonElement.className = 'btn ' + (button.className || '');
+                    buttonElement.textContent = button.text;
+                    buttonElement.addEventListener('click', () => {
+                        if (button.callback) {
+                            button.callback();
+                        }
+                        if (button.closeOnClick !== false) {
+                            this.hideDialog();
+                        }
+                    });
+                    dialogOptions.appendChild(buttonElement);
+                }
+            }
+
+            // Hide close button if specified
+            const closeButton = document.getElementById('dialog-close');
+            if (closeButton) {
+                closeButton.style.display = options.hideCloseButton ? 'none' : 'block';
             }
 
             // Show the dialog
@@ -581,6 +803,7 @@ export class Game {
      */
     createSettingsContent() {
         const container = document.createElement('div');
+        container.className = 'settings-container';
 
         // Time scale setting
         const timeScaleDiv = document.createElement('div');
@@ -618,6 +841,43 @@ export class Game {
         timeScaleDiv.appendChild(timeScaleSelect);
         container.appendChild(timeScaleDiv);
 
+        // Resource decay settings
+        const decayDiv = document.createElement('div');
+        decayDiv.className = 'setting-item';
+
+        const decayLabel = document.createElement('label');
+        decayLabel.textContent = 'Resource Decay: ';
+        decayLabel.htmlFor = 'resource-decay';
+
+        const decaySelect = document.createElement('select');
+        decaySelect.id = 'resource-decay';
+
+        const decayOptions = [
+            { value: 0, text: 'Off' },
+            { value: 0.05, text: 'Slow' },
+            { value: 0.1, text: 'Normal' },
+            { value: 0.2, text: 'Fast' }
+        ];
+
+        decayOptions.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            if (this.resourceSystem.consumptionRates.ingredients.default === option.value) {
+                optionElement.selected = true;
+            }
+            decaySelect.appendChild(optionElement);
+        });
+
+        decaySelect.addEventListener('change', () => {
+            const newDecayRate = parseFloat(decaySelect.value);
+            this.resourceSystem.consumptionRates.ingredients.default = newDecayRate;
+        });
+
+        decayDiv.appendChild(decayLabel);
+        decayDiv.appendChild(decaySelect);
+        container.appendChild(decayDiv);
+
         // Add a save button
         const saveSettingsButton = document.createElement('button');
         saveSettingsButton.className = 'btn btn-primary mt-3';
@@ -633,72 +893,62 @@ export class Game {
     }
 
     /**
-     * Show a notification message
-     * @param {string} message - The notification message
-     * @param {string} type - The notification type (info, success, error)
+     * Create a market dialog for buying and selling resources
+     * @returns {HTMLElement} The market dialog content element
      */
-    showNotification(message, type = 'info') {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
+    createMarketDialog() {
+        const container = document.createElement('div');
+        container.className = 'market-container';
 
-        // Add to the document
-        document.body.appendChild(notification);
+        // Current gold display
+        const goldDiv = document.createElement('div');
+        goldDiv.className = 'market-gold';
+        const goldAmount = this.resourceSystem.getResourceAmount('currency', 'gold');
+        goldDiv.textContent = `Available Gold: ${goldAmount}`;
+        container.appendChild(goldDiv);
 
-        // Fade in
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
+        // Tabs for Buy/Sell
+        const tabsDiv = document.createElement('div');
+        tabsDiv.className = 'market-tabs';
 
-        // Remove after a delay
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 3000);
+        const buyTab = document.createElement('button');
+        buyTab.className = 'market-tab active';
+        buyTab.textContent = 'Buy';
+
+        const sellTab = document.createElement('button');
+        sellTab.className = 'market-tab';
+        sellTab.textContent = 'Sell';
+
+        tabsDiv.appendChild(buyTab);
+        tabsDiv.appendChild(sellTab);
+        container.appendChild(tabsDiv);
+
+        // Content container
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'market-content';
+        container.appendChild(contentDiv);
+
+        // Generate the buy content initially
+        const buyContent = this.createMarketBuyContent();
+        contentDiv.appendChild(buyContent);
+
+        // Tab switching logic
+        buyTab.addEventListener('click', () => {
+            buyTab.classList.add('active');
+            sellTab.classList.remove('active');
+            contentDiv.innerHTML = '';
+            contentDiv.appendChild(this.createMarketBuyContent());
+        });
+
+        sellTab.addEventListener('click', () => {
+            sellTab.classList.add('active');
+            buyTab.classList.remove('active');
+            contentDiv.innerHTML = '';
+            contentDiv.appendChild(this.createMarketSellContent());
+        });
+
+        return container;
     }
 
     /**
-     * Render the inn and its rooms
-     */
-    renderInn() {
-        // Inn rendering logic will go here
-    }
-
-    /**
-     * Render characters (player, guests, staff)
-     */
-    renderCharacters() {
-        // Character rendering logic will go here
-    }
-
-    /**
-     * Render UI elements on the canvas
-     */
-    renderUI() {
-        // UI rendering logic will go here
-    }
-
-    /**
-     * Handle window resize events
-     */
-    handleResize() {
-        this.resizeCanvas();
-        this.render();
-    }
-
-    /**
-     * Resize the canvas to match its container
-     */
-    resizeCanvas() {
-        if (!this.canvas) return;
-
-        const container = this.canvas.parentElement;
-        if (container) {
-            this.canvas.width = container.clientWidth;
-            this.canvas.height = container.clientHeight;
-        }
-    }
-}
+     * Create content for the buy tab
